@@ -32,11 +32,20 @@ android {
 }
 
 dependencies {
+    // Retrofit for API calls
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
+    // OkHttp for WebSockets
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+
+    // AndroidX dependencies
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+
+    // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

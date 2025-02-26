@@ -52,6 +52,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                 order.markDessertReady();
             }
 
+            // Send update to API
+            OrderManager.getInstance().markOrderReady(order.getId());
+
             // Notify listener that order has changed
             orderReadyListener.onOrderReady(order);
         });

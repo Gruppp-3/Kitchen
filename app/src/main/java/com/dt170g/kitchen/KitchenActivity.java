@@ -25,7 +25,7 @@ public class KitchenActivity extends AppCompatActivity implements OrderAdapter.O
         // ADD TEST ORDERS HERE
         addTestOrders();
 
-        // Hämta ordrar från alla bord
+        // Hämta beställningar från alla bord
         orderList = new ArrayList<>();
         for (Table table : OrderManager.getInstance().getTables()) {
             orderList.addAll(table.getOrders());

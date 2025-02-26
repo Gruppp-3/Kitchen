@@ -1,13 +1,23 @@
 package com.dt170g.kitchen;
+import com.google.gson.annotations.SerializedName;
 
 public class Order {
+    private static long idCounter = 0;
+    @SerializedName("id")
+    private long id; // Unique ID for order tracking
+    @SerializedName("tableNumber")
     private String tableNumber;
+    @SerializedName("dish")
     private String dish;
+    @SerializedName("starterReady")
     private boolean isStarterReady;
+    @SerializedName("mainCourseReady")
     private boolean isMainCourseReady;
+    @SerializedName("dessertReady")
     private boolean isDessertReady;
 
     public Order(String tableNumber, String dish) {
+        this.id = ++idCounter; // Auto-generate unique ID
         this.tableNumber = tableNumber;
         this.dish = dish;
         this.isStarterReady = false;
@@ -15,7 +25,11 @@ public class Order {
         this.isDessertReady = false;
     }
 
-    // Getter methods
+    // Getter for Order ID (used for API communication)
+    public long getId() {
+        return id;
+    }
+
     public String getTableNumber() {
         return tableNumber;
     }
@@ -24,20 +38,25 @@ public class Order {
         return dish;
     }
 
-    // Setter methods for dish readiness
+    // Update order status using the correct methods
     public void markStarterReady() {
-        this.isStarterReady = true;
+        if (dish.equalsIgnoreCase("Förrätt")) {
+            this.isStarterReady = true;
+        }
     }
 
     public void markMainCourseReady() {
-        this.isMainCourseReady = true;
+        if (dish.equalsIgnoreCase("Huvudrätt")) {
+            this.isMainCourseReady = true;
+        }
     }
 
     public void markDessertReady() {
-        this.isDessertReady = true;
+        if (dish.equalsIgnoreCase("Efterrätt")) {
+            this.isDessertReady = true;
+        }
     }
 
-    // Getter methods for checking readiness
     public boolean isStarterReady() {
         return isStarterReady;
     }
@@ -46,10 +65,7 @@ public class Order {
         return isMainCourseReady;
     }
 
-
     public boolean isDessertReady() {
         return isDessertReady;
     }
-
-
 }
