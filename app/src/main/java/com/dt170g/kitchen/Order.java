@@ -1,5 +1,3 @@
-
-
 package com.dt170g.kitchen;
 
 public class Order {
@@ -17,6 +15,7 @@ public class Order {
         this.isDessertReady = false;
     }
 
+    // Getter methods
     public String getTableNumber() {
         return tableNumber;
     }
@@ -24,40 +23,33 @@ public class Order {
     public String getDish() {
         return dish;
     }
-    public void setReady(boolean ready) {
-        if (dish.equalsIgnoreCase("Förrätt")) {
-            this.isStarterReady = ready;
-        } else if (dish.equalsIgnoreCase("Huvudrätt")) {
-            this.isMainCourseReady = ready;
-        } else if (dish.equalsIgnoreCase("Efterrätt")) {
-            this.isDessertReady = ready;
-        }
+
+    // Setter methods for dish readiness
+    public void markStarterReady() {
+        this.isStarterReady = true;
     }
 
+    public void markMainCourseReady() {
+        this.isMainCourseReady = true;
+    }
 
+    public void markDessertReady() {
+        this.isDessertReady = true;
+    }
+
+    // Getter methods for checking readiness
     public boolean isStarterReady() {
         return isStarterReady;
-    }
-
-    public void setStarterReady(boolean starterReady) {
-        isStarterReady = starterReady;
     }
 
     public boolean isMainCourseReady() {
         return isMainCourseReady;
     }
 
-    public void setMainCourseReady(boolean mainCourseReady) {
-        isMainCourseReady = mainCourseReady;
-    }
 
     public boolean isDessertReady() {
         return isDessertReady;
     }
 
-    public void setDessertReady(boolean dessertReady) {
-        isDessertReady = dessertReady;
-    }
+
 }
-
-

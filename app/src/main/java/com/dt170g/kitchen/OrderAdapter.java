@@ -1,4 +1,3 @@
-
 package com.dt170g.kitchen;
 
 import android.view.LayoutInflater;
@@ -31,21 +30,33 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_order, parent, false);
         return new ViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Order order = orderList.get(position);
-        holder.tableNumber.setText("Bord " + order.getTableNumber());
+        holder.tableNumber.setText(order.getTableNumber());
 
+        // Set checkboxes based on order status
         holder.starterCheckbox.setChecked(order.isStarterReady());
         holder.mainCourseCheckbox.setChecked(order.isMainCourseReady());
         holder.dessertCheckbox.setChecked(order.isDessertReady());
 
+        // Handle button click to mark order as ready
         holder.readyButton.setOnClickListener(v -> {
-            order.setReady(true);
+            if (holder.starterCheckbox.isChecked()) {
+                order.markStarterReady();
+            }
+            if (holder.mainCourseCheckbox.isChecked()) {
+                order.markMainCourseReady();
+            }
+            if (holder.dessertCheckbox.isChecked()) {
+                order.markDessertReady();
+            }
+
+            // Notify listener that order has changed
             orderReadyListener.onOrderReady(order);
         });
     }
+
 
     @Override
     public int getItemCount() {
@@ -67,5 +78,3 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         }
     }
 }
-
-
