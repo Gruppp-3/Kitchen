@@ -12,7 +12,7 @@ public class KitchenActivity extends AppCompatActivity implements OrderAdapter.O
 
     private RecyclerView recyclerView;
     private OrderAdapter orderAdapter;
-    private List<Order> orderList; // Korrekt lista för order
+    private List<Order> orderList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,20 +22,20 @@ public class KitchenActivity extends AppCompatActivity implements OrderAdapter.O
         recyclerView = findViewById(R.id.recyclerViewOrders);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // 🔥 Lägg till testorder
+        // ADD TEST ORDERS HERE
         addTestOrders();
 
         // Hämta ordrar från alla bord
         orderList = new ArrayList<>();
         for (Table table : OrderManager.getInstance().getTables()) {
-            orderList.addAll(table.getOrders()); // Hämta alla ordrar från varje bord
+            orderList.addAll(table.getOrders());
         }
 
         orderAdapter = new OrderAdapter(orderList, this);
         recyclerView.setAdapter(orderAdapter);
+
     }
 
-    // ✅ Metod för att skapa testorder
     private void addTestOrders() {
         OrderManager orderManager = OrderManager.getInstance();
         orderManager.addOrder("Bord 1", "Förrätt");
@@ -44,16 +44,16 @@ public class KitchenActivity extends AppCompatActivity implements OrderAdapter.O
         orderManager.addOrder("Bord 3", "Huvudrätt");
     }
 
+
     @Override
     public void onOrderReady(Order order) {
-        Toast.makeText(this, "Order från " + order.getTableNumber() + " är klar!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Rätt från " + order.getTableNumber() + " är klar!", Toast.LENGTH_SHORT).show();
         sendSignalToPersonalApp(order);
-        orderAdapter.notifyDataSetChanged();  // Uppdatera listan när en order är färdig
+        orderAdapter.notifyDataSetChanged();
     }
 
     private void sendSignalToPersonalApp(Order order) {
         // Här kan du implementera en signal via Firebase eller API
-        // T.ex. en push-notis till personalen om att ordern är klar
         Toast.makeText(this, "Signal skickad till personalen för " + order.getTableNumber(), Toast.LENGTH_SHORT).show();
     }
 }

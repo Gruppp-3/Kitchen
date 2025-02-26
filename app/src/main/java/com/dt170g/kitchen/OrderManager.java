@@ -1,5 +1,3 @@
-
-
 package com.dt170g.kitchen;
 
 import java.util.ArrayList;
@@ -24,6 +22,7 @@ public class OrderManager {
     }
 
     public List<Table> getTables() { return tables; }
+
     public void addOrder(String tableNumber, String dish) {
         for (Table table : tables) {
             if (table.getTableNumber().equals(tableNumber)) {
@@ -33,4 +32,3 @@ public class OrderManager {
         }
     }
 }
-
