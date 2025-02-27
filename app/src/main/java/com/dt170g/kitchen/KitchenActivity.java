@@ -2,19 +2,16 @@ package com.dt170g.kitchen;
 
 import android.os.Bundle;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.dt170g.api.ApiService;
 import com.dt170g.api.RetrofitClient;
-import com.dt170g.kitchen.R;
-
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import java.util.ArrayList;
+import java.util.List;
 
 public class KitchenActivity extends AppCompatActivity implements OrderAdapter.OnOrderReadyListener {
 
@@ -31,29 +28,28 @@ public class KitchenActivity extends AppCompatActivity implements OrderAdapter.O
         recyclerView = findViewById(R.id.recyclerViewOrders);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Initialize your API service here
-        apiService = RetrofitClient.getInstance().getApi();
+        apiService = RetrofitClient.getApiService(); // Initialize API service
 
-        // Fetch orders from the backend
-        fetchActiveOrders();
+        fetchOrdersFromAPI();
     }
 
-    private void fetchActiveOrders() {
+    private void fetchOrdersFromAPI() {
         apiService.getActiveOrders().enqueue(new Callback<List<Order>>() {
             @Override
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                     orderList = response.body();
                     orderAdapter = new OrderAdapter(orderList, KitchenActivity.this);
                     recyclerView.setAdapter(orderAdapter);
                 } else {
-                    Toast.makeText(KitchenActivity.this, "No orders found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(KitchenActivity.this, "Inga aktiva beställningar", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Order>> call, Throwable t) {
-                Toast.makeText(KitchenActivity.this, "Error fetching orders", Toast.LENGTH_SHORT).show();
+                Toast.makeText(KitchenActivity.this, "Fel vid hämtning av beställningar", Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
             }
         });
     }
@@ -66,7 +62,6 @@ public class KitchenActivity extends AppCompatActivity implements OrderAdapter.O
     }
 
     private void sendSignalToPersonalApp(Order order) {
-        // Implement your signal logic here (e.g., via Firebase)
         Toast.makeText(this, "Signal skickad till personalen för " + order.getTableNumber(), Toast.LENGTH_SHORT).show();
     }
 }
