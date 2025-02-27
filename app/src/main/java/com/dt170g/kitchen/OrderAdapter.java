@@ -12,8 +12,8 @@ import java.util.List;
 
 import android.util.Log;
 
-import com.dt170g.kitchen.api.ApiService;
-import com.dt170g.kitchen.api.RetrofitClient;
+import com.dt170g.api.ApiService;
+import com.dt170g.api.RetrofitClient;
 
 import retrofit2.Call;
 import retrofit2.Callback;
