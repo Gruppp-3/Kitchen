@@ -1,71 +1,52 @@
 package com.dt170g.kitchen;
-import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class Order {
-    private static long idCounter = 0;
-    @SerializedName("id")
-    private long id; // Unique ID for order tracking
-    @SerializedName("tableNumber")
-    private String tableNumber;
-    @SerializedName("dish")
-    private String dish;
-    @SerializedName("starterReady")
-    private boolean isStarterReady;
-    @SerializedName("mainCourseReady")
-    private boolean isMainCourseReady;
-    @SerializedName("dessertReady")
-    private boolean isDessertReady;
+    private Long id;
+    private String orderDate;  // Format "yyyy-MM-dd" or adjust as needed
+    private Integer tableNumber;
+    private Boolean isFinished;
+    private List<OrderDish> orderDishes;
 
-    public Order(String tableNumber, String dish) {
-        this.id = ++idCounter; // Auto-generate unique ID
-        this.tableNumber = tableNumber;
-        this.dish = dish;
-        this.isStarterReady = false;
-        this.isMainCourseReady = false;
-        this.isDessertReady = false;
-    }
-
-    // Getter for Order ID (used for API communication)
-    public long getId() {
+    // Getters and Setters
+    public Long getId() {
         return id;
     }
 
-    public String getTableNumber() {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public Integer getTableNumber() {
         return tableNumber;
     }
 
-    public String getDish() {
-        return dish;
+    public void setTableNumber(Integer tableNumber) {
+        this.tableNumber = tableNumber;
     }
 
-    // Update order status using the correct methods
-    public void markStarterReady() {
-        if (dish.equalsIgnoreCase("Förrätt")) {
-            this.isStarterReady = true;
-        }
+    public Boolean getIsFinished() {
+        return isFinished;
     }
 
-    public void markMainCourseReady() {
-        if (dish.equalsIgnoreCase("Huvudrätt")) {
-            this.isMainCourseReady = true;
-        }
+    public void setIsFinished(Boolean isFinished) {
+        this.isFinished = isFinished;
     }
 
-    public void markDessertReady() {
-        if (dish.equalsIgnoreCase("Efterrätt")) {
-            this.isDessertReady = true;
-        }
+    public List<OrderDish> getOrderDishes() {
+        return orderDishes;
     }
 
-    public boolean isStarterReady() {
-        return isStarterReady;
-    }
-
-    public boolean isMainCourseReady() {
-        return isMainCourseReady;
-    }
-
-    public boolean isDessertReady() {
-        return isDessertReady;
+    public void setOrderDishes(List<OrderDish> orderDishes) {
+        this.orderDishes = orderDishes;
     }
 }
