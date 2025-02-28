@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Order {
     private Long id;
-    private String orderDate;  // Format "yyyy-MM-dd" or adjust as needed
+    private String orderDate;
     private Integer tableNumber;
     private Boolean isFinished;
     private List<OrderDish> orderDishes;

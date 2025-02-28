@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Min Restaurang</string>
+    <string name="open_kitchen">Öppna Köket</string>
+    <string name="select_table">Välj ett bord</string>
+    <string name="footer_text">Antons Skafferi</string>
+</resources>

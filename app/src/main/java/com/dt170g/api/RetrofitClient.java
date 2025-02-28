@@ -8,7 +8,7 @@ public class RetrofitClient {
     private final ApiService api;
     private RetrofitClient() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/") // Replace with your backend URL
+                .baseUrl("http://10.0.2.2:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

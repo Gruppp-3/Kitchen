@@ -28,27 +28,27 @@ public class OrderManager {
     public void addOrder(String tableNumber, String dish) {
         for (Table table : tables) {
             if (table.getTableNumber().equals(tableNumber)) {
-                // Create a new Order instance.
+
                 Order order = new Order();
-                // Extract the numeric part from the table number (e.g., "Bord 3" -> 3)
+
                 String numericPart = tableNumber.replaceAll("\\D+", "");
                 if (!numericPart.isEmpty()) {
                     order.setTableNumber(Integer.parseInt(numericPart));
                 } else {
-                    order.setTableNumber(0); // Fallback value
+                    order.setTableNumber(0);
                 }
                 order.setIsFinished(false);
-                // Initialize the list of OrderDishes
+
                 List<OrderDish> orderDishes = new ArrayList<>();
                 order.setOrderDishes(orderDishes);
 
-                // Create an OrderDish for the provided dish name.
+
                 OrderDish orderDish = new OrderDish();
-                // Create a Dish object and set its name.
+
                 Dish dishObj = new Dish();
                 dishObj.setName(dish);
                 orderDish.setDish(dishObj);
-                orderDish.setStatus("PENDING");  // Initial status
+                orderDish.setStatus("PENDING");
                 orderDishes.add(orderDish);
 
                 table.addOrder(order);

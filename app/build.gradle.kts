@@ -16,7 +16,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -36,6 +35,11 @@ dependencies {
     // Retrofit for API calls
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Jackson for JSON processing
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.15.0")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.15.0")
 
     // OkHttp for WebSockets
     implementation("com.squareup.okhttp3:okhttp:4.9.3")

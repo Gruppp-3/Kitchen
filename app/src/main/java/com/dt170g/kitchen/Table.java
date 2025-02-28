@@ -32,13 +32,13 @@ public class Table {
         for (Order order : orders) {
             if (order.getOrderDishes() != null) {
                 for (OrderDish orderDish : order.getOrderDishes()) {
-                    // Check if the Dish object exists and its name matches the dishType
+
                     if (orderDish.getDish() != null &&
                             orderDish.getDish().getName().equalsIgnoreCase(dishType)) {
-                        // Mark this dish as ready by setting its status
+
                         orderDish.setStatus("READY");
-                        // Optionally, you might want to update the order status as well
-                        return; // Exit after marking the first matching dish
+
+                        return;
                     }
                 }
             }

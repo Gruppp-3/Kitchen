@@ -24,17 +24,15 @@ import java.util.HashMap;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
 
-    private final List<Order> orderList;
-    private final OrderManager orderManager;
+    private final List<RecievedOrder> orderList;
     private final OnOrderReadyListener listener;
 
     public interface OnOrderReadyListener {
-        void onOrderReady(Order order);
+        void onOrderReady(RecievedOrder order);
     }
 
-    public OrderAdapter(List<Order> orderList, OnOrderReadyListener listener) {
+    public OrderAdapter(List<RecievedOrder> orderList, OnOrderReadyListener listener) {
         this.orderList = orderList;
-        this.orderManager = OrderManager.getInstance();
         this.listener = listener;
     }
 
@@ -47,54 +45,36 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Order order = orderList.get(position);
-        holder.tableNumber.setText("Table " + order.getTableNumber());
+        RecievedOrder order = orderList.get(position);
+        holder.tableNumber.setText("Bord: " + order.getTableNumber());
 
-        // ✅ Determine readiness based on `OrderDish` statuses
-        boolean starterReady = false;
-        boolean mainCourseReady = false;
-        boolean dessertReady = false;
+        StringBuilder appetizerList = new StringBuilder();
+        StringBuilder mainCourseList = new StringBuilder();
+        StringBuilder dessertList = new StringBuilder();
 
-        if (order.getOrderDishes() != null) {
-            for (OrderDish dish : order.getOrderDishes()) {
-                if (dish.getDishName().toLowerCase().contains("starter") && "READY".equals(dish.getStatus())) {
-                    starterReady = true;
-                }
-                if (dish.getDishName().toLowerCase().contains("main") && "READY".equals(dish.getStatus())) {
-                    mainCourseReady = true;
-                }
-                if (dish.getDishName().toLowerCase().contains("dessert") && "READY".equals(dish.getStatus())) {
-                    dessertReady = true;
+        if (order.getOrderSpecs() != null) {
+            for (OrderSpecs dish : order.getOrderSpecs()) {
+                Log.d("ORDER_CHECK", "Rätt: " + dish.getMeal() + ", Kategori: " + dish.getCategory());
+
+                if ("Förrätt".equalsIgnoreCase(dish.getCategory())) {
+                    appetizerList.append(dish.getMeal()).append(" (").append(dish.getCount()).append(")\n");
+                } else if ("Huvudrätt".equalsIgnoreCase(dish.getCategory())) {
+                    mainCourseList.append(dish.getMeal()).append(" (").append(dish.getCount()).append(")\n");
+                } else if ("Efterrätt".equalsIgnoreCase(dish.getCategory())) {
+                    dessertList.append(dish.getMeal()).append(" (").append(dish.getCount()).append(")\n");
                 }
             }
         }
 
-        holder.starterCheckbox.setChecked(starterReady);
-        holder.mainCourseCheckbox.setChecked(mainCourseReady);
-        holder.dessertCheckbox.setChecked(dessertReady);
+        holder.orderedAppetizer.setText(appetizerList.length() > 0 ? appetizerList.toString() : "Inga förrätter");
+        holder.orderedMainCourse.setText(mainCourseList.length() > 0 ? mainCourseList.toString() : "Inga huvudrätter");
+        holder.orderedDessert.setText(dessertList.length() > 0 ? dessertList.toString() : "Inga efterrätter");
 
-        // Set listeners to update dish statuses
-        holder.starterCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            updateDishStatus(order, "starter", isChecked ? "READY" : "PENDING");
-        });
 
-        holder.mainCourseCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            updateDishStatus(order, "main", isChecked ? "READY" : "PENDING");
-        });
-
-        holder.dessertCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            updateDishStatus(order, "dessert", isChecked ? "READY" : "PENDING");
-        });
-
-        // ✅ Ready button updates all dishes to "SERVED"
         holder.readyButton.setOnClickListener(v -> {
-            for (OrderDish dish : order.getOrderDishes()) {
-                dish.setStatus("SERVED");
-            }
-            notifyDataSetChanged(); // Refresh UI
+            listener.onOrderReady(order);
         });
     }
-
 
     @Override
     public int getItemCount() {
@@ -102,50 +82,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tableNumber;
-        CheckBox starterCheckbox, mainCourseCheckbox, dessertCheckbox;
+        TextView tableNumber, orderedAppetizer, orderedMainCourse, orderedDessert;
         Button readyButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tableNumber = itemView.findViewById(R.id.tableNumber);
-            starterCheckbox = itemView.findViewById(R.id.starterCheckbox);
-            mainCourseCheckbox = itemView.findViewById(R.id.mainCourseCheckbox);
-            dessertCheckbox = itemView.findViewById(R.id.dessertCheckbox);
+            orderedAppetizer = itemView.findViewById(R.id.orderedAppetizer);
+            orderedMainCourse = itemView.findViewById(R.id.orderedMainCourse);
+            orderedDessert = itemView.findViewById(R.id.orderedDessert);
             readyButton = itemView.findViewById(R.id.readyButton);
         }
     }
-    private void updateDishStatus(Order order, String dishType, String newStatus) {
-
-        ApiService apiService;
-        apiService = RetrofitClient.getInstance().getApi();
-
-        for (OrderDish dish : order.getOrderDishes()) {
-            if (dish.getDishName().toLowerCase().contains(dishType)) {
-                dish.setStatus(newStatus);
-                notifyDataSetChanged();
-
-                // Send API request to update status in backend
-                Map<String, String> body = new HashMap<>();
-                body.put("status", newStatus);
-                apiService.updateOrderDishStatus(dish.getId(), body).enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if (response.isSuccessful()) {
-                            Log.d("OrderAdapter", "Dish " + dish.getDishName() + " updated to " + newStatus);
-                        } else {
-                            Log.e("OrderAdapter", "Failed to update dish status");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        Log.e("OrderAdapter", "Network error: " + t.getMessage());
-                    }
-                });
-                return;
-            }
-        }
-    }
-
 }

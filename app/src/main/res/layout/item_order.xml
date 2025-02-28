@@ -15,41 +15,83 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- Bordnummer -->
         <TextView
             android:id="@+id/tableNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bord 1"
+            android:text="Bord: "
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="#5D4037"/>
 
+        <!-- Förrätter -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Förrätt"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/orderedAppetizer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Beställd: -"
+            android:textSize="16sp"/>
         <CheckBox
             android:id="@+id/starterCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Förrätt"/>
+            android:text="Markerad som Klar" />
 
+        <!-- Huvudrätter -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Huvudrätt"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/orderedMainCourse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Beställd: -"
+            android:textSize="16sp"/>
         <CheckBox
             android:id="@+id/mainCourseCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Huvudrätt"/>
+            android:text="Markerad som Klar" />
 
+        <!-- Efterrätter -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Efterrätt"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/orderedDessert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Beställd: -"
+            android:textSize="16sp"/>
         <CheckBox
             android:id="@+id/dessertCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Efterrätt"/>
+            android:text="Markerad som Klar" />
 
+        <!-- Knapp för att markera ordern som klar -->
         <Button
             android:id="@+id/readyButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Klar"
+            android:layout_width="337dp"
+            android:layout_height="61dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
             android:backgroundTint="#4CAF50"
-            android:textColor="#FFFFFF"
-            android:layout_marginTop="8dp"/>
+            android:text="Markera Order Som Klar"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
-</androidx.cardview.widget.CardView>
 
+</androidx.cardview.widget.CardView>
