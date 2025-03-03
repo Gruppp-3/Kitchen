@@ -28,7 +28,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     private final OnOrderReadyListener listener;
 
     public interface OnOrderReadyListener {
-        void onOrderReady(RecievedOrder order);
+        void onOrderReady(RecievedOrder order, Boolean starter, Boolean main, Boolean dessert);
     }
 
     public OrderAdapter(List<RecievedOrder> orderList, OnOrderReadyListener listener) {
@@ -70,9 +70,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         holder.orderedMainCourse.setText(mainCourseList.length() > 0 ? mainCourseList.toString() : "Inga huvudrätter");
         holder.orderedDessert.setText(dessertList.length() > 0 ? dessertList.toString() : "Inga efterrätter");
 
-
+        CheckBox starterChecked = holder.itemView.findViewById(R.id.starterCheckbox);
+        CheckBox mainChecked = holder.itemView.findViewById(R.id.mainCourseCheckbox);
+        CheckBox dessertChecked = holder.itemView.findViewById(R.id.dessertCheckbox);
         holder.readyButton.setOnClickListener(v -> {
-            listener.onOrderReady(order);
+            listener.onOrderReady(order, starterChecked.isChecked(), mainChecked.isChecked(), dessertChecked.isChecked());
         });
     }
 

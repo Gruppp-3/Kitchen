@@ -8,6 +8,8 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
+
 import com.dt170g.kitchen.RecievedOrder;
 
 
@@ -24,4 +26,8 @@ public interface ApiService {
 
     @POST("api/orders")
     Call<Order> createOrder(@Body Order order);
+
+    @POST("api/kitchen/signal")
+    Call<Void> sendSignal(@Query("tableNr") Integer tableNr, @Query("starter")Boolean starter, @Query("main") Boolean main, @Query("dessert") Boolean dessert);
+
 }

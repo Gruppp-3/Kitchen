@@ -2,6 +2,8 @@ package com.dt170g.kitchen;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -62,16 +64,27 @@ public class KitchenActivity extends AppCompatActivity implements OrderAdapter.O
     }
 
 
+
     @Override
-    public void onOrderReady(RecievedOrder order) {
-        Toast.makeText(this, "Rätt från " + order.getTableNumber() + " är klar!", Toast.LENGTH_SHORT).show();
-        sendSignalToPersonalApp(order);
+    public void onOrderReady(RecievedOrder order, Boolean starter, Boolean main, Boolean dessert) {
+        Toast.makeText(this, "Maträtt för bord Nr " + order.getTableNumber() + " är klar!", Toast.LENGTH_SHORT).show();
+        sendSignalToPersonalApp(order.getTableNumber(), starter, main, dessert);
         orderAdapter.notifyDataSetChanged();
     }
 
-    private void sendSignalToPersonalApp(RecievedOrder order) {
-
-        Toast.makeText(this, "Signal skickad till personalen för " + order.getTableNumber(), Toast.LENGTH_SHORT).show();
+    private void sendSignalToPersonalApp(Integer tableNr, Boolean starter, Boolean main, Boolean dessert) {
+        apiService.sendSignal(tableNr, starter, main, dessert).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Toast.makeText(KitchenActivity.this, "Signal skickad till personalen för bord Nr " + tableNr, Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+               Toast.makeText(KitchenActivity.this,
+                       "Fel vid skicka signal: " + t.getMessage(),
+                       Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }
