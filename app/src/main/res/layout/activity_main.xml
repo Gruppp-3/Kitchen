@@ -38,16 +38,13 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <!-- Knapp "Öppna Köket" -->
-        <Button
-            android:id="@+id/kitchenButton"
-            android:layout_width="315dp"
-            android:layout_height="88dp"
+        <!-- RecyclerView for Upcoming Orders -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/upcomingOrdersRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:padding="16dp"
-            android:background="@drawable/gradient_background"
-        android:text="Visa kommande beställningar"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:clipToPadding="false"/>
     </LinearLayout>
 
     <!-- ============== FOOTER ============== -->
