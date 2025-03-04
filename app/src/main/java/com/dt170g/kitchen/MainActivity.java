@@ -14,9 +14,7 @@ import com.dt170g.api.ApiService;
 import com.dt170g.api.RetrofitClient;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -71,15 +69,15 @@ public class MainActivity extends AppCompatActivity implements OrderAdapter.OnOr
 
                     Log.d(TAG, "Fetched " + receivedOrders.size() + " active orders");
                 } else {
-                    Log.e(TAG, "Failed to fetch orders: " + response.message());
-                    showErrorToast("Could not fetch orders");
+                    Log.e(TAG, "Could not fetch orders: " + response.message());
+                    showErrorToast("Kunde inte hämta ordrar. Försök igen senare.");
                 }
             }
 
             @Override
             public void onFailure(Call<List<RecievedOrder>> call, Throwable t) {
                 Log.e(TAG, "Network error when fetching orders", t);
-                showErrorToast("Network error. Please check your connection.");
+                showErrorToast("Nätverksfel. Kontrollera din anslutning.");
             }
         });
     }
@@ -105,16 +103,18 @@ public class MainActivity extends AppCompatActivity implements OrderAdapter.OnOr
                         if (response.isSuccessful()) {
                             Log.d(TAG, "Order signal sent successfully for table " + order.getTableNumber());
                             fetchOrders(); // Refresh orders after marking
-                        } else {
-                            Log.e(TAG, "Failed to send order signal: " + response.message());
-                            showErrorToast("Could not update order status");
+
+                            // Show toast message to staff
+                            Toast.makeText(MainActivity.this,
+                                    "Signal skickad till personalen för " + order.getTableNumber(),
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
                         Log.e(TAG, "Network error when sending order signal", t);
-                        showErrorToast("Network error. Could not update order.");
+                        showErrorToast("Nätverksfel. Kunde inte uppdatera ordern.");
                     }
                 });
     }
