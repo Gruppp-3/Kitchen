@@ -3,4 +3,5 @@
     <string name="open_kitchen">Open Kitchen</string>
     <string name="select_table">Select a table</string>
     <string name="footer_text">Antons Pantry</string>
+    <string name="back_button_description" translatable="false">Tillbaka</string>
 </resources>

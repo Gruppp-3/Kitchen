@@ -44,7 +44,8 @@
             android:layout_width="315dp"
             android:layout_height="88dp"
             android:padding="16dp"
-            android:text="Visa kommande beställningar"
+            android:background="@drawable/gradient_background"
+        android:text="Visa kommande beställningar"
             android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>
