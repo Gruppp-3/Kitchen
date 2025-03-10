@@ -1,5 +1,7 @@
 package com.dt170g.kitchen;
 
+import android.content.ComponentName;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -102,12 +104,30 @@ public class MainActivity extends AppCompatActivity implements OrderAdapter.OnOr
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.isSuccessful()) {
                             Log.d(TAG, "Order signal sent successfully for table " + order.getTableNumber());
-                            fetchOrders(); // Refresh orders after marking
 
-                            // Show toast message to staff
-                            Toast.makeText(MainActivity.this,
-                                    "Signal skickad till personalen för " + order.getTableNumber(),
-                                    Toast.LENGTH_SHORT).show();
+                            // Launch waiter app with a special action
+                            try {
+                                Intent launchIntent = new Intent();
+                                // Set component to target the waiter app
+                                launchIntent.setComponent(new ComponentName(
+                                        "com.example.waiterapplication",
+                                        "com.example.waiterapplication.ReadyOrdersActivity"));
+                                // Add flags to create a new task
+                                launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                // Add extra to indicate an order is ready and should play sound
+                                launchIntent.putExtra("PLAY_SOUND", true);
+                                launchIntent.putExtra("TABLE_NUMBER", order.getTableNumber());
+                                startActivity(launchIntent);
+
+                                Toast.makeText(MainActivity.this,
+                                        "Signal skickad till personalen för bord " + order.getTableNumber(),
+                                        Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                Log.e(TAG, "Could not launch waiter app: " + e.getMessage());
+                            }
+
+                            // Refresh orders after marking
+                            fetchOrders();
                         }
                     }
 
@@ -117,6 +137,21 @@ public class MainActivity extends AppCompatActivity implements OrderAdapter.OnOr
                         showErrorToast("Nätverksfel. Kunde inte uppdatera ordern.");
                     }
                 });
+    }
+
+    private void launchWaiterAppReadyOrdersScreen() {
+        try {
+            // Create an intent to launch the waiter app directly to ReadyOrdersActivity
+            Intent launchIntent = new Intent();
+            launchIntent.setComponent(new ComponentName(
+                    "com.example.waiterapplication",  // Package name of waiter app
+                    "com.example.waiterapplication.ReadyOrdersActivity")); // Full class name
+            launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(launchIntent);
+        } catch (Exception e) {
+            Log.e(TAG, "Could not launch waiter app: " + e.getMessage());
+            // Fallback - just continue without launching waiter app
+        }
     }
 
     private void showErrorToast(String message) {

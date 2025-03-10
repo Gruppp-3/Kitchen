@@ -49,6 +49,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         StringBuilder dessertList = new StringBuilder();
 
         // If the order has orderSpecs, let's parse them
+        // If the order has orderSpecs, let's parse them
         if (order.getOrderSpecs() != null) {
             for (OrderSpecs dish : order.getOrderSpecs()) {
                 Log.d("ORDER_CHECK", "Rätt: " + dish.getMeal() + ", Kategori: " + dish.getCategory());
@@ -65,10 +66,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                 else if (category.contains("efterrätt")) {
                     dessertList.append(dish.getMeal()).append(" (x").append(dish.getCount()).append(")\n");
                 }
-                // If you have “Vegetariska” or other categories, handle them as you like
+                // Handle Vegetariska category
+                else if (category.contains("vegetarisk")) {
+                    // Add to main course list with a "Veg" indicator
+                    mainCourseList.append(dish.getMeal()).append(" (x").append(dish.getCount()).append(") [Veg]\n");
+                }
+                // Handle other unknown categories
                 else {
-                    // optional: treat unknown categories or "Vegetariska"
-                    // mainCourseList.append(dish.getMeal()).append("... etc
+                    // Add to main course with unknown category indicator
+                    mainCourseList.append(dish.getMeal()).append(" (x").append(dish.getCount()).append(")\n");
                 }
             }
         }
